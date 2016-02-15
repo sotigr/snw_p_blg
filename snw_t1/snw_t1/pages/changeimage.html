@@ -95,11 +95,11 @@
         fdata.append('image', finimage);
 
         AjaxHelper.PostFormData('api/changeuserimage', fdata, (d) => {
-            (d == 1) ? location.href = '/profile' :
-            sidebar.ClearItems();
-            sidebar.AddItem(new SideBarItem("Error", d));
-            sidebar.SetAutoHide(true);
-            sidebar.Show();
+            if (d == "1") {location.href = '/profile' }else{
+                sidebar.ClearItems();
+                sidebar.AddItem(new SideBarItem("Error", d));
+                sidebar.SetAutoHide(true);
+                sidebar.Show();}
         }, () => {
             sidebar.ClearItems();
             sidebar.AddItem(new SideBarItem("Transaction failed", "Connection problem"));

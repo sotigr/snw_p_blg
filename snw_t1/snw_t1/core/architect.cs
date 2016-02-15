@@ -185,7 +185,7 @@ namespace snw.core.system
             {
                 if (_js_list.ContainsKey(Name))
                 {
-                    res = _js_list[res];
+                    res = _js_list[Name];
                 }
                 else
                 {
