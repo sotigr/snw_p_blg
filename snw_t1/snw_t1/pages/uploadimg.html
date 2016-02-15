@@ -1,0 +1,37 @@
+﻿
+<input type="button" onclick="SelectImage();" value="Select Image" />
+<div id="imagehost" style="width:300px; height:300px; background-size:100% 100%;"></div>
+
+<input type="button" onclick="UploadImage();" value="Upload Image" />
+
+
+<script>
+    var imagedata = null;
+    function SelectImage() {
+        var d = new OpenFileDialog();
+        d.SetFilter(".jpg, .png");
+        d.Show(function () {
+            d.GetDataBase64(function (data) {
+                $('#imagehost').css("background-image", "url(" + data + ")");
+                imagedata = new FormData();
+                imagedata.append("image", d.GetFile());
+            });
+        });
+    }
+    function UploadImage() {
+        if (imagedata != null) {
+            AjaxHelper.PostFormData("/api/image/upload", imagedata, function (response) {
+                alert(response);
+                imagedata = null;
+            }, function (response) {
+                alert(response);
+                imagedata = null;
+            });
+        }
+        else {
+            alert("Select image first")
+        }
+
+    }
+
+</script>

@@ -1,0 +1,65 @@
+﻿<t id="pr_header" Control="header"></t>
+<script>$("#pr_header").html(userinfo.nick + "'s Profile");</script>
+<style>
+    .profile_table {
+        background-color:#474747;
+        line-height:200%; 
+    }    
+   .profile_table  tr:nth-child(even) {
+     background-color: #3d3d3d;  
+    }
+    .profile_table tr td:first-child {
+    width:30%;
+    }
+</style>
+<table style="width:100%">
+    <tr>
+        <td style="width:160px;">
+            <div class="logo" image="/api/getuserimage" style="width:128px; height:128px;" onclick="location.href='/changeimage';" title="Edit Image"></div>
+        </td>
+        <td valign="top">
+            <table style="width:100%" class="profile_table">
+                <tr>
+                    <td>Nickname:</td>
+                    <td><span id="label_nick"></span></td>
+                </tr>
+                <tr>
+                    <td>Email address:</td>
+                    <td><span id="label_email"></span></td>
+                </tr>
+                <tr>
+                    <td>First name:</td>
+                    <td><span id="label_f_name"></span></td>
+                </tr>
+                <tr>
+                    <td>Last name:</td>
+                    <td><span id="label_l_name"></span></td>
+                </tr>
+                <tr>
+                    <td>Security level:</td>
+                    <td><span id="label_sc"></span></td>
+                </tr>
+                <tr>
+                    <td>Account creation date:</td>
+                    <td><span id="label_date"></span></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<script>
+    $("#label_nick").html(userinfo.nick);
+    $("#label_email").html(userinfo.email);
+    if (userinfo.firstname == null) {
+        $("#label_f_name").html("Not set");
+    } else {
+        $("#label_f_name").html(userinfo.firstname);
+    }
+    if (userinfo.lastname == null) {
+        $("#label_l_name").html("Not set");
+    } else {
+        $("#label_l_name").html(userinfo.lastname);
+    }
+    $("#label_sc").html(userinfo.sec_clearence);
+    $("#label_date").html(userinfo.date);
+</script>

@@ -1,0 +1,52 @@
+﻿<t Control="header">File manager</t>
+<div id="listviewhost">
+    
+</div>
+<script src="../js/lib.js"></script>
+<script>
+    var ListView = (function () { 
+        function ListView() {
+            this.name = guid();
+            this.items = new collections.LinkedList();
+            this.columns = new collections.LinkedList();
+        }
+        ListView.prototype.addColumn = function (columnname) {
+            this.items.add(item);
+        };
+        ListView.prototype.removeColumn = function (columnname) {
+            this.items.remove(item);
+        };
+        ListView.prototype.addItem = function (item) {
+            this.items.add(item);
+        }; 
+        ListView.prototype.removeItem = function (item) {
+            this.items.remove(item); 
+        };
+        ListView.prototype.draw = function (host) {
+           
+        };
+        return ListView;
+    })();
+    var ListViewItem = (function () {  
+        function ListViewItem() {
+            this.name = guid();
+            this.subitems = new collections.LinkedList();
+        }
+        ListViewItem.prototype.add = function (item) {
+            this.subitems.add(item);
+        };
+        ListViewItem.prototype.remove = function (item) {
+            this.subitems.add(item);
+        };
+        return ListViewItem;
+    })();
+    var ListViewColumn = (function () {
+        function ListViewColumn() {
+            this.name = guid();
+            this.header = "";
+            this.width = 0;
+        }
+        return ListViewColumn;
+    })();
+
+</script>

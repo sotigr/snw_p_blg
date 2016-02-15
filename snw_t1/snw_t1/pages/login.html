@@ -1,0 +1,67 @@
+﻿<div style="margin:0 auto; max-width:400px;   ">
+    <t Text="login" Control="header"></t>
+    <table align="center" style="width:50%; margin-bottom:5px;">
+        <tr>
+            <td><t Text="username"></t></td>
+        </tr>
+        <tr>
+            <td><input id="nickinp" type="text" style="width:100%;" /></td>
+        </tr>
+        <tr>
+            <td><t Text="password"></t></td>
+        </tr>
+        <tr>
+            <td><input id="passinp" type="password" style="width:100%;" /></td>
+        </tr>
+    </table>
+    <div style="text-align:center;">
+        <input id="loginBtn" type="button" Text="login" />
+    </div>
+    <div style="text-align:right;">
+        <url href="/register"><t Text="noacc"></t></url>
+    </div>
+
+</div> 
+<script>
+    var sidebar = new SideBar("Logging in"); 
+    $(document).ready(function () {
+        $('#mbtn_login').attr("istoggled", "true");
+    });
+
+    $('#loginBtn').on('click', login);
+    $('#passinp').keypress(function (e) {
+        if (e.which == 13) {
+            login();
+        }
+    });
+    function login() {
+        sidebar.ClearItems();
+        sidebar.AddItem(new SideBarItem("Please wait...", SpinnerInit, null, false));
+        sidebar.SetAutoHide(false);
+        sidebar.Show(); 
+        var nick, pass;
+        nick = $('#nickinp').val();
+        pass = $('#passinp').val();
+        if (nick != "" && pass != "" && pass.length >= 4) {
+            AjaxHelper.PostAsync('/api/login', { nick: nick, pass: md5(pass) }, function (data) {
+                if (data == "1") {
+                    location.href = "/";
+                }
+                else {
+                    sidebar.ClearItems();
+                    sidebar.AddItem(new SideBarItem("Error", data, null, false));
+                    sidebar.SetAutoHide(true); 
+                }
+            }, function () {
+                sidebar.ClearItems();
+                sidebar.AddItem(new SideBarItem("Error", "Connection error", null, false));
+                sidebar.SetAutoHide(true); 
+            });
+        }
+        else {
+            sidebar.ClearItems();
+            sidebar.AddItem(new SideBarItem("Error", "Username or password is not valid", null, false));
+            sidebar.SetAutoHide(true); 
+        }
+    }
+</script>

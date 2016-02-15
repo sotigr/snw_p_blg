@@ -1,0 +1,89 @@
+﻿<div style="margin:0 auto; max-width:400px;   ">
+    <t Text="register" Control="header"></t>
+    <table align="center" style="width:50%; margin-bottom:5px;">
+        <tr>
+            <td><t Text="username"></t></td>
+        </tr>
+        <tr>
+            <td><input id="nickname" type="text" style="width:100%;" /></td>
+        </tr>
+        <tr>
+            <td><t Text="email"></t></td>
+        </tr>
+        <tr>
+            <td><input id="mail" type="text" style="width:100%;" /></td>
+        </tr>
+        <tr>
+            <td><t Text="password"></t></td>
+        </tr>
+        <tr>
+            <td><input id="pass" type="password" style="width:100%;" /></td>
+        </tr>
+        <tr>
+            <td><t Text="repassword"></t></td>
+        </tr>
+        <tr>
+            <td><input id="repass" type="password" style="width:100%;" /></td>
+        </tr>
+    </table>
+    <div style="text-align:center;"><t Text="readtherules"></t><url href="/rules"><t Text="link"></t></url></div>
+    <div style="text-align:center;">
+        <input id="btnreg" type="button" Text="register" />
+    </div>
+
+    <script>
+        var sidebar = new SideBar("Registering"); 
+        $('#btnreg').on('click', register);
+        $('#repass').keypress(function (e) {
+            if (e.which == 13) {
+                register();
+            }
+        });
+        function register() {
+            sidebar.ClearItems();
+            sidebar.AddItem(new SideBarItem("Please wait...", SpinnerInit, null, false));
+            sidebar.SetAutoHide(false);
+            sidebar.Show();
+            var username, password, repassword, mail;
+            username = $("#nickname").val();
+            password = $("#pass").val();
+            repassword = $("#repass").val();
+            mail = $("#mail").val();
+            if (username.length > 3) {
+                if (password.length > 3) {
+                    if (password == repassword) {
+                        AjaxHelper.PostAsync('/api/register', { nickname: username, password: md5(password), email: mail }, function (data) {
+                            if (data == "1") {
+                                location.href = "/";
+                            }
+                            else {
+                                sidebar.ClearItems();
+                                sidebar.AddItem(new SideBarItem("Error", data, null, false));
+                                sidebar.SetAutoHide(true); 
+                            }
+                        }, function (err) {
+                            sidebar.ClearItems();
+                            sidebar.AddItem(new SideBarItem("Error", "There was a connection error. Try again later.", null, false));
+                            sidebar.SetAutoHide(true); 
+                        });
+                    }
+                    else {
+                        sidebar.ClearItems();
+                        sidebar.AddItem(new SideBarItem("Passwords don't much", "Please check your password and try again", null, false));
+                        sidebar.SetAutoHide(true); 
+                    }
+                }
+                else {
+                    sidebar.ClearItems();
+                    sidebar.AddItem(new SideBarItem("Password not valid", "Your password must be at least 4 characters long", null, false));
+                    sidebar.SetAutoHide(true); 
+                }
+            }
+            else {
+                sidebar.ClearItems();
+                sidebar.AddItem(new SideBarItem("Nickname not valid", "The nickname must be at least 4 characters long", null, false));
+                sidebar.SetAutoHide(true); 
+            }
+        }
+    </script>
+</div>

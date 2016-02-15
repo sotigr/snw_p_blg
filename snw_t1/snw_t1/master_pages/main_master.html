@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
+    <meta http-equiv="PRAGMA" content="NO-CACHE" />
+    <meta http-equiv="EXPIRES" content="-1" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+
+    <link rel="stylesheet" type="text/css" href="/style_lib">
+    <link rel="stylesheet" type="text/css" href="/style_main">
+</head>
+
+<body id="bg">
+    <script src="/script_lib"></script>
+    <script src="/master_script"></script>
+     <script>
+        var userinfo = null;
+        AjaxHelper.Get("/api/userdata", null, (d) => {
+            if (d != "null")
+            {
+                userinfo = d;
+            } 
+        },null); 
+    </script>
+    <vars></vars> 
+    <noscript>
+        <div style="text-align:center; width:200px;height:200px;" class="centerdiv">
+            <p>You need JavaScript to load this website!</p>
+            <p>=^.^=</p>
+        </div>
+    </noscript>
+    <div id="scrollbox" style="position:absolute; box-sizing:content-box; top:0; left:0; width:100%; height:100%;"> 
+        <div id="header">
+            <div id="logo" class="logo" image="/img/fox_icon.png" style="width:80px; height:80px; position:absolute;" onclick="location.href='/';" title="Sotig Home"></div>
+            <div style="z-index:9999999;" id="menu_host"></div> 
+        </div>
+        <div id="shadow_div">
+            <div id="content_host">
+                <div style="padding:10px;">
+                    <mpcontent></mpcontent>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+        if (userinfo != null)
+        {
+            $('#logo').attr('image', "/api/getuserimage");
+        } 
+        //Creating menus
+        var m = new menu();
+
+        var homeitm = new menu_item("Home", "location.href = '/';");
+        m.add(homeitm);
+        
+        var articleitm = new menu_item("Articles", null);
+        articleitm.add(new menu_item("Show latest articles", null));
+        articleitm.add(new menu_item("Show categories", null));
+        if (userinfo != null) {
+            if (userinfo.sec_clearence > 2) {
+                articleitm.add(new menu_item("Write a new article", null));
+                articleitm.add(new menu_item("Manage Articles", null));
+                articleitm.add(new menu_item("Article settings", null));
+            }
+        }
+        m.add(articleitm);
+ 
+        if (userinfo != null) {
+            if (userinfo.sec_clearence > 2) {
+                var adminmenu = new menu_item("Administrator", null);
+                adminmenu.add(new menu_item("Ban account", null));
+                adminmenu.add(new menu_item("Show all logged in users", null));
+                adminmenu.add(new menu_item("Upload image", "location.href='/#';"));
+                adminmenu.add(new menu_item("Manage files", "location.href='/filemanager';"));
+                adminmenu.add(new menu_item("Show session history", null));
+                m.add(adminmenu);
+            }
+        }
+        var accountmenu = new menu_item("Account", null); 
+        if (userinfo == null) {
+            accountmenu.add(new menu_item("Login", "location.href='/login';"));
+            accountmenu.add(new menu_item("Register", "location.href='/register';"));
+        } else {
+          
+            accountmenu.add(new menu_item("Profile", "location.href='/profile';"));
+            accountmenu.add(new menu_item("User preferences", null));
+            accountmenu.add(new menu_item("Active sessions", null));
+            accountmenu.add(new menu_item("Show session history", null));
+            accountmenu.add(new menu_item("Logout", "AjaxHelper.PostAsync('/api/logout', null, (data)=>{ if (data == '1'){location.href='/';}})"));
+        }
+    
+        m.add(accountmenu);
+
+        //accountmenu.getitems()[1].focus = true;
+        m.draw("menu_host");
+
+        //Menu Init
+        $(document).ready(function () {
+
+            //Initializing main functions
+            initMainLib();
+             
+        });
+
+        function btnhome_Click() {
+            location.href = "/";
+        }
+        function btnoptions_Click() {
+            sub2.Show(100, 100);
+        }
+        function btnlogin_Click() {
+            location.href = "/login";
+        }
+
+   
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿<div>
+    <script src="/js/masterscript.js"></script>
+    <div>This is the mainpage</div>
+    <input Text="back" type="button" onclick="side.ClearItems();" />
+
+    <t Text="welcome" Control="header"></t>
+    <input type="button" value="show" onclick="shh();" />
+    <script>
+        $(".logo").each(function () {
+            $(this).attr("style", $(this).attr("style") + "background-image:url('" + $(this).attr("image") + "'); ");
+        });
+        $(document).ready(function () {
+            $('#mbtn_home').attr("istoggled", "true");
+        });
+        var side = new SideBar("Test");
+        side.AddItem(new SideBarItem("test", SpinnerInit, "", false));
+        function shh() {
+            side.SetAutoHide(false);
+            side.Show(); 
+        }
+    </script>
+</div>
